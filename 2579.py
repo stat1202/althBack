@@ -2,12 +2,14 @@ import sys
 input = sys.stdin.readline
 
 N = int(input () )
-steps = [ int(input() ) for _ in range(N) ]
-dp = [0]*(N+1)
-print(steps)
+steps = [0]*301
+for i in range(N):
+    steps[i]=int(input())
 
+dp = [0]*301
 dp[0] = steps[0]
-
-# [10, 20, 15, 25, 10, 20]
-# [10, 0, 0, 0, 0, 0]
-for _ in range
+dp[1] = steps[0] + steps[1]
+dp[2] = max(steps[0] +steps[2], steps[1] + steps[2])
+for i in range(3, N):
+    dp[i] = max( dp[i-3] + steps[i-1] + steps[i] , dp[i-2] + steps[i])
+print(dp[N-1])
