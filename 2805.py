@@ -1,23 +1,40 @@
-import sys
-input = sys.stdin.readline
+from collections import deque
 
-N, M = map(int, input().rstrip().split())
-woods = list(map(int, input().rstrip().split()))
 
-max_h = max(woods)
-min_h = 1
-answers = []
+def dfs(start):
+    visited[start] = True
+    print(start, end=" ")
 
-while min_h <= max_h:
-    now_h = (max_h + min_h) // 2
-    my_wood = 0
-    for wood in woods:
-        if wood > now_h:
-            my_wood += wood - now_h
+    for i in graph[start]:
+        if not visited[i]:
+            dfs(i)
 
-    if my_wood >= M:
-        min_h = now_h + 1
-    else:
-        max_h = now_h - 1
 
-print(max_h)
+def bfs(start):
+    queue = deque([start])
+    visited[start] = True
+    while queue:
+
+        v = queue.popleft()
+        print(v, end=" ")
+        for i in graph[v]:
+            if not visited[i]:
+                visited[i] = True
+                queue.append(i)
+N,M,V = map(int, input().split())
+
+graph = [ [] for _ in range( N+1 )]
+
+for _ in range(M):
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+
+for i in graph:
+    i.sort()
+visited = [False] * (N+1)
+dfs(V)
+print()
+
+visited = [False] * (N+1)
+bfs(V)
