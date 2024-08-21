@@ -1,10 +1,12 @@
-import sys
-n = input().rstrip()
-c = len(n)-1
-answer = 0
+N = int(input())
 
-for i in range(c):
-    answer += 9 * (10 ** i) * (i+1)
-    i += 1
-answer += ( (int(n) -(10 ** c)) + 1) * (c+1)
-print(answer)
+str_N = str(N)
+
+digit = len(str_N)
+
+count = 0
+for i in range(1, digit):
+  count += 9 * i * 10 ** (i-1)
+
+count +=  (N - 10**(digit-1) + 1) * digit
+print(count)
