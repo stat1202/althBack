@@ -1,33 +1,30 @@
-# N 유저 수 M 친구 관계 수
 from collections import deque
+N, M = map(int, input().split())
 
-N,M = map(int, input().split() )
-
-graph = [ [] for _ in range(N+1)]
+graph = [ [] for _ in range(N)]
+answer = 0
+min_kevin= 1e9
 for _ in range(M):
-    start, end = map(int, input().split() )
-    graph[start].append(end)
-    graph[end].append(start)
-# print(graph)
-answer = []
-def bfs(graph, node, visited):
-    num = [0] * (N+1)
-    queue = deque([node])
-    path = []
+  s, e = map(int, input().split())
+  graph[s-1].append(e-1)
+  graph[e-1].append(s-1)
 
-    visited[node] = True
+def bfs(start):
+  q = deque([start])
+  relation = [0] * N
+  while q:
+    v = q.popleft()
 
-    while queue:
-        v = queue.popleft()
-        path.append(v)       
-        for i in graph[v]:
-            if not visited[i]:
-                num[i] = num[v] + 1
-                queue.append(i)
-                visited[i] = True
-    return sum(num)
+    for n in graph[v]:
+      if relation[n] == 0:
+        relation[n] += relation[v] + 1
+        q.append(n)
+  return sum(relation)
 
-for i in range(1, N+1):  
-    visited = [False] * (N+1)
-    answer.append( bfs(graph, i, visited) )
-print(answer.index( min(answer) ) +1 )
+for i in range(N):
+  kevin = bfs(i)
+  if min_kevin > kevin:
+    answer = i+1
+    min_kevin = kevin
+
+print(answer)
