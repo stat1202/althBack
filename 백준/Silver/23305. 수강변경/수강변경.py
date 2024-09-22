@@ -20,10 +20,6 @@ for n in map(int, input().split()):
   B[n] += 1
   classes.add(n)
 
-
-if len(A) > len(B):
-  A, B = B, A
-
 for cl in classes:
   if cl in A and cl in B:
     answer -= min( A[cl], B[cl] )
