@@ -1,27 +1,32 @@
 def solution(plans):
-    answer=[]
-    now=[]
-    plans.sort(key=lambda x:x[1])
+    answer = []
+    stack = []
+    # plans 시간 변환
     for i in range(len(plans)):
-        plans[i][1]=int(plans[i][1][0:2])*60+int(plans[i][1][3:])
-        plans[i][2]=int(plans[i][2])
+        h,m = map(int, plans[i][1].split(":"))
+        plans[i][1] = h * 60 + m
+        plans[i][2] = int(plans[i][2])
     
-    for i in range(len(plans)-1):
-        now.append(plans[i])
-        diff=plans[i+1][1]-plans[i][1]
+    plans.sort(key = lambda x : x[1])
+    
+    for i in range(1, len(plans)):
+        n, s, p = plans[i-1]
+        rest = plans[i][1] - s
         
-        while now and diff:
-            if now[-1][2]<=diff:
-                diff-=now[-1][2]
-                answer.append(now[-1][0])
-                now.pop()
-            else: 
-                now[-1][2]-=diff
-                diff=0
-    
+        stack.append([n, s, p])
+        
+        while stack and rest:
+            if stack[-1][2] <= rest:
+                rest -= stack[-1][2]
+                plan = stack.pop()
+                answer.append(plan[0])
+            else:
+                stack[-1][2] -= rest
+                rest = 0
     answer.append(plans[-1][0])
-    while now:
-        answer.append(now[-1][0])
-        now.pop(-1)
     
+    while stack:
+        plan = stack.pop()
+        answer.append(plan[0])
+
     return answer
