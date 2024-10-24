@@ -1,23 +1,27 @@
-from collections import deque
+import sys
+input = sys.stdin.readline
 
 T = int(input())
 
 for _ in range(T):
-  d = input()
-  answer = deque([])
-  cursor = 0
-  for i in d:
-    if i == "<":
-      if cursor > 0:
-        cursor -= 1
-    elif i == ">":
-      if cursor < len(answer):
-        cursor += 1
-    elif i == "-":
-      if cursor > 0: 
-        del answer[cursor - 1]
-        cursor -= 1 
+  L = input().rstrip()
+  left = []
+  right = []
+
+  for l in L:
+    if l == '<':
+      if left:
+        right.append(left.pop())
+    elif l == '>':
+      if right:
+        left.append(right.pop())
+    elif l == '-':
+      if left:
+        left.pop()
     else:
-      answer.insert(cursor, i)
-      cursor += 1
-  print("".join(answer) )
+      left.append(l)
+  right.reverse()
+  
+  print(''.join(left) + ''.join(right) )
+
+    
