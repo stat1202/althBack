@@ -1,17 +1,27 @@
 S = input()
 T = input()
 
-flag = 0
-def getWord(t):
-  global flag
-  if t == S:
-    flag = 1
-    return
-  if t:
-    if t[-1] == 'A':
-      getWord(t[:-1])
-    if t[0] == 'B':
-      getWord(t[1:][::-1])
+D = [ [False] * len(T) for _ in range(len(T))]
+E = [ [False] * len(T) for _ in range(len(T))]
 
-getWord(T)
-print(flag)
+for i in range(0, len(T) - len(S) + 1):
+  D[i][i + len(S) - 1] = T[i: i + len(S)] == S
+  E[i][i + len(S) - 1] = T[i: i + len(S)][::-1] == S
+
+for i in range(len(S) + 1, len(T) + 1):
+  for j in range(0, len(T) - i + 1):
+    k = j + i - 1
+    if T[k] == 'A':
+      D[j][k] |= D[j][k-1]
+    if T[j] == 'B':
+      D[j][k] |= E[j+1][k]
+
+    if T[j] == 'A':
+      E[j][k] |= E[j+1][k]
+    if T[k] == 'B':
+      E[j][k] |= D[j][k-1]
+
+if D[0][len(T) - 1]:
+  print(1)
+else:
+  print(0)
